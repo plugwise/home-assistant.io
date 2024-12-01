@@ -89,7 +89,7 @@ For a thermostat, the active schedule can be deactivated or reactivated via the 
 
 Auto means the schedule is active, Heat means it's not active. The active thermostat schedule can be changed via the connected thermostat select-entity. Please note: that only schedules that have two or more schedule points will be shown as select options.
 
-## Configuration
+## Before configuring
 
 {% important %}
 When you have an Anna and an Adam, make sure to **only** configure the Adam integration. You can press the "IGNORE" button on the auto-discovered Anna integration to hide this integration. In case you need to rediscover the Anna integration, make sure to click the "STOP IGNORING" button on the Plugwise integration first, available via "show ignored integrations".
