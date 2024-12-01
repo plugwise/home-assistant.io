@@ -43,7 +43,6 @@ Platforms available - depending on your Smile and setup include:
  - `select` (for changing a thermostat schedule, a regulation mode (Adam only))
  - `switch` (for Plugs connected to Adam, or Circles and Stealths connected to a Stretch)
 
-
 ## Pre-requisites
 
 The Plugwise Smile(s) in your network will be automatically discovered and shown on the integrations dashboard. All you need is the Smile ID as its password, which is an 8-character string printed on the sticker on the bottom of your Smile. Repeat this for each individual Smile.
