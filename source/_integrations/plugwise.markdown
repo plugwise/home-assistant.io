@@ -296,9 +296,9 @@ To retrieve diagnostics:
 1. Go to {% my integrations title="**Settings** > **Devices & services**" %}, and select your integration.
 2. If you have more than one Plugwise Smile, select the gateway that is experiencing issues.
 3. Select the device with 'Smile' in it's name.
-2. On the integration entry, select the {% icon "mdi:dots-vertical" %}.
+4. On the integration entry, select the {% icon "mdi:dots-vertical" %}.
    - Then, select **Download diagnostics** and a JSON file will be downloaded.
-4. You can inspect the downloaded file or, when requested, upload it to your issue report.
+5. You can inspect the downloaded file or, when requested, upload it to your issue report.
 
 #### Adding a Smile reboot button
 
