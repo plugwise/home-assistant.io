@@ -67,7 +67,7 @@ Auto means the schedule is active, and Heat means it's not active. The active th
 ## Configuration
 
 {% important %}
-When you have an Anna and an Adam, make sure to **only** configure the Adam integration. You can press the "IGNORE" button on the auto-discovered Anna integration to hide this integration. In case you need to rediscover the Anna integration, make sure to click the "STOP IGNORING" button on the Plugwise integration first, available via "show ignored integrations".
+When you have an Anna and an Adam, only the Adam will be shown as discovered. Make sure to **only** configure the Adam integration, i.e. do **not** manually configure the Anna.
 {% endimportant %}
 
 The Plugwise Smile(s) present in your network will be automatically discovered via Zeroconf discovery and will be shown on the Integrations-page. All you need is the Smile ID as it's password, which is an 8 character string printed on the sticker on the bottom of you Smile. Repeat this for each individual Smile.
