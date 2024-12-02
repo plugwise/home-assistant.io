@@ -316,7 +316,7 @@ script:
 
 ## Supported devices
 
-The Plugwise integration relies on the [plugwise](https://pypi.org/project/plugwise/) module for python. It currently provides support for:
+The Plugwise integration relies on the [plugwise](https://pypi.org/project/plugwise/) module for Python. It currently provides support for:
 
 - Adam (a complete zone control system) also known as Adam HA.
   - On/Off, OpenTherm or Loria/Thermastage heating and cooling support.
