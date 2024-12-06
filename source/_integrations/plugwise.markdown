@@ -30,9 +30,9 @@ ha_platforms:
 ha_integration_type: hub
 ---
 
-[Plugwise](https://www.plugwise.com) provides smart home climate and power monitoring devices. You can acquire one or more of their network attached hubs, called Smiles, to monitor and/or control your home.
+[Plugwise](https://www.plugwise.com) provides smart home climate and power monitoring devices.
 
-This integration supports Plugwise equipment connected through a **Smile**. The smile functions as a hub where you can connect to from either their Plugwise App or using this Home Assistant integration. There are 4 types of Smiles.
+This integration supports Plugwise devices connected to a network connected hub called a **Smile**. The Smile functions as a hub where you can connect to from either their Plugwise App or using this Home Assistant integration. There are 4 types of Smiles.
 
 - Full zonecontrol using the [Adam](https://www.plugwise.com/en_US/zonecontrol) using [additional devices](#supported-devices) such as smart valves and smart-plugs.
 - A stand-alone smart thermostat called [Anna](https://www.plugwise.com/en_US/products/anna).
@@ -40,12 +40,12 @@ This integration supports Plugwise equipment connected through a **Smile**. The 
 - Although no longer sold, there also is the Stretch, a gateway to create network connectivity for their older power products.
 
 {% note %}
-Plugwise formerly sold Power based products comprised of a USB stick and smart plugs (amongst a few other items). This integration does **not** support the USB-stick. Re-use of the these products using a Stretch or an Adam is supported. Work for USB support is in development but not ready to become a formal Home Assistant integration yet.
+Plugwise formerly sold Power based products comprised of a USB stick and smart plugs (amongst a few other items). This integration does **not** support the USB-stick. Re-use of the these products using a Stretch or an Adam is supported. Work for USB support is in development by the community but not ready to become a formal Home Assistant integration just yet.
 {% endnote %}
 
 ## Platforms
 
-Depending on your specific Smile and available devices, the following platforms are available:
+Depending on your specific Smile and connected devices, the following platforms will be available:
 
 - [Climate](#climate) for Adam and (a stand-alone) Anna.
 - [Binary Sensor](#binary_sensor) for status of your domestic hot water or secondary heater.
@@ -79,7 +79,7 @@ Auto means the schedule is active, and Heat means it's not active. The active th
 ## Configuration
 
 {% important %}
-When you have an Anna and an Adam, only the Adam will be shown as discovered. Make sure to **only** configure the Adam integration, i.e. do **not** manually configure the Anna.
+When you have an Anna and an Adam, only the Adam will be shown as discovered. Make sure to **only** configure the Adam, i.e. do **not** manually configure the Anna.
 {% endimportant %}
 
 The Plugwise Smile(s) present in your network will be automatically discovered via Zeroconf discovery and will be shown on the Integrations-page. All you need is the Smile ID as its password, which is an 8 character string printed on the sticker on the bottom of your Smile. Repeat this for each individual Smile.
@@ -257,10 +257,14 @@ script:
 
 A number of [sensors](/integrations/sensor) will be available, included but not limited to the examples shown below. By default not all sensors will be shown, for example; we disable the Anna's `outdoor_temperature` sensor in favor of the one provided by an auxilary device if it has one.
 
+Example sensors (not extensive):
+
 |Sensor|Description|
 --- | ---
 |Outdoor temperature | For Anna, this will show the temperature it retrieves from the internet, unless you have an auxilary device with a temperature sensor |
 |Indoor temperature | For Anna, Lisa or Jip this will show the temperature measured at the specific thermostat |
+|P1 Net Electricity Point | Your netto electricity at this time |
+|P1 Electricity Produced off peak cumulative | The total produced electricity during off peak |
 
 ### Select
 
