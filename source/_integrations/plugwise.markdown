@@ -30,11 +30,13 @@ ha_platforms:
 ha_integration_type: hub
 ---
 
-[Plugwise](https://www.plugwise.com) provides smart home climate and power monitoring devices.
+[Plugwise](https://www.plugwise.com) provides smart home climate and power monitoring devices. This integation allows you to monitor and control your climate and energy (including gas) consumption and energy production. The energy information can be used for the [energy dashboard](/home-energy-management). 
+
+## Supported devices
 
 This integration supports Plugwise devices connected to a network connected hub called a **Smile**. You can connect to the Smile using your browser, their Plugwise App or this Home Assistant integration. There are 4 types of Smiles:
 
-- Full zonecontrol using the [Adam](https://www.plugwise.com/en_US/zonecontrol) using [additional devices](#supported-devices) such as smart valves and smart-plugs.
+- Full zonecontrol using the [Adam](https://www.plugwise.com/en_US/zonecontrol) using [additional devices](#devices-overview) such as smart valves and smart-plugs.
 - A stand-alone smart thermostat called [Anna](https://www.plugwise.com/en_US/products/anna).
 - For power monitoring there is one simply called the [P1](https://www.plugwise.com/en_US/products/smile-p1).
 - Although no longer sold, there also is support for Stretch, a gateway to create network connectivity for their older power products.
@@ -104,7 +106,7 @@ The interval which the integration fetches data from the Smile depends on the de
 |Device-type|Interval|
 --- | ---
 | Climate entities |60 seconds|
-| Power entities |10 seconds|
+| Energy and gas entities |10 seconds|
 | Stretch entities |60 seconds|
 
 ## Entities
@@ -259,8 +261,9 @@ Example sensors (not extensive):
 --- | ---
 |Outdoor temperature | For Anna, this will show the temperature it retrieves from the internet, unless you have an auxiliary device with a temperature sensor |
 |Indoor temperature | For Anna, Lisa or Jip this will show the temperature measured at the specific thermostat |
-|P1 Net Electricity Point | Your netto electricity at this time |
+|P1 Net Electricity Point | Your netto electricity use at this time, can be negative when producing energy, i.e. though solar panels |
 |P1 Electricity Produced off peak cumulative | The total produced electricity during off peak |
+|Gas Consumed Interval | The gas consumed since the last interval |
 
 ### Select
 
@@ -331,7 +334,7 @@ script:
           entity_id: button.adam_reboot
 ```
 
-## Supported devices
+## Devices overview
 
 The Plugwise integration relies on the [plugwise](https://pypi.org/project/plugwise/) module for Python. It currently provides support for:
 
