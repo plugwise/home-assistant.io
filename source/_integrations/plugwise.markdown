@@ -32,16 +32,14 @@ ha_integration_type: hub
 
 [Plugwise](https://www.plugwise.com) provides smart home climate and power monitoring devices.
 
-This integration supports Plugwise devices connected to a network connected hub called a **Smile**. The Smile functions as a hub where you can connect to from either their Plugwise App or using this Home Assistant integration. There are 4 types of Smiles.
+This integration supports Plugwise devices connected to a network connected hub called a **Smile**. You can connect to the Smile using your browser, their Plugwise App or this Home Assistant integration. There are 4 types of Smiles:
 
 - Full zonecontrol using the [Adam](https://www.plugwise.com/en_US/zonecontrol) using [additional devices](#supported-devices) such as smart valves and smart-plugs.
 - A stand-alone smart thermostat called [Anna](https://www.plugwise.com/en_US/products/anna).
 - For power monitoring there is one simply called the [P1](https://www.plugwise.com/en_US/products/smile-p1).
-- Although no longer sold, there also is the Stretch, a gateway to create network connectivity for their older power products.
+- Although no longer sold, there also is support for Stretch, a gateway to create network connectivity for their older power products.
 
-{% note %}
-Plugwise formerly sold Power based products comprised of a USB stick and smart plugs (amongst a few other items). This integration does **not** support the USB-stick. Re-use of the these products using a Stretch or an Adam is supported. Work for USB support is in development by the community but not ready to become a formal Home Assistant integration just yet.
-{% endnote %}
+Plugwise formerly sold power based products using a USB stick as the controller. This integration does not support the `Stick` directly, see [legacy power devices](#legacy-power-devices) for more information.
 
 ## Platforms
 
@@ -78,11 +76,7 @@ Auto means the schedule is active, and Heat means it's not active. The active th
 
 ## Configuration
 
-{% important %}
-When you have an Anna and an Adam, only the Adam will be shown as discovered. Make sure to **only** configure the Adam, i.e. do **not** manually configure the Anna.
-{% endimportant %}
-
-The Plugwise Smile(s) present in your network will be automatically discovered via Zeroconf discovery and will be shown on the Integrations-page. All you need is the Smile ID as its password, which is an 8 character string printed on the sticker on the bottom of your Smile. Repeat this for each individual Smile.
+The Plugwise Smile(s) present in your network will be automatically discovered via Zeroconf discovery and will be shown on the Integrations-page. All you need is the Smile ID as its password, which is an 8 character string printed on the sticker on the bottom of your Smile. Repeat the configuration for each individual Smile.
 
 {% include integrations/config_flow.md %}
 
@@ -101,19 +95,21 @@ For a thermostat, the active schedule can be deactivated or reactivated via the 
 
 `auto` indicates the schedule is active, `heat` indicates it is inactive. The active thermostat schedule can be changed via the connected thermostat [select](#select)-entity. Please note: only schedules that have two or more schedule points will be shown as select options.
 
+You can create and/or modify schedules using ehter the Plugwise App or visiting the [local device page](#accessing-the-local-device).
+
 ## Data updates
 
-The interval which the integration fetches data from the Smile depends on the device:
+The interval which the integration fetches data from the Smile depends on the device-type. 
 
-|Interval|Device-type|
+|Device-type|Interval|
 --- | ---
-|60 seconds| Climate entities |
-|10 seconds| Power entities, such as the P1 and plugs. |
-|60 seconds| Stretch entities |
+| Climate entities |60 seconds|
+| Power entities |10 seconds|
+| Stretch entities |60 seconds|
 
 ## Entities
 
-This integration will show all Plugwise devices (like hardware devices, multi-thermostat climate-zones, and virtual switchgroups) present in your Plugwise configuration. In addition, you will see a Gateway device representing your central Plugwise gateway (i.e., the Adam, Smile Anna, Smile P1 or Stretch).
+This integration will show all Plugwise devices (like hardware devices, multi-thermostat climate-zones and virtual switchgroups) present in your Plugwise configuration. In addition, you will see a Gateway device representing your central Plugwise gateway (i.e., the Adam, Smile Anna, Smile P1 or Stretch).
 
 For example, if you have an Adam setup with a Lisa named `Living` and a Tom named `Bathroom`, these will show up as individual devices. The heating/cooling device connected to your Smile will be shown as `OpenTherm` or `OnOff`, depending on how the Smile communicates with the device. If you have Plugs (as in, pluggable switches connecting to an Adam) or Aqara Smart Plugs those will be shown as devices as well.
 
@@ -255,13 +251,13 @@ script:
 
 ### Sensor
 
-A number of [sensors](/integrations/sensor) will be available, included but not limited to the examples shown below. By default not all sensors will be shown, for example; we disable the Anna's `outdoor_temperature` sensor in favor of the one provided by an auxilary device if it has one.
+A number of [sensors](/integrations/sensor) will be available, included but not limited to the examples shown below. By default not all sensors will be shown, for example; we disable the Anna's `outdoor_temperature` sensor in favor of the one provided by an auxiliary device if it has one.
 
 Example sensors (not extensive):
 
 |Sensor|Description|
 --- | ---
-|Outdoor temperature | For Anna, this will show the temperature it retrieves from the internet, unless you have an auxilary device with a temperature sensor |
+|Outdoor temperature | For Anna, this will show the temperature it retrieves from the internet, unless you have an auxiliary device with a temperature sensor |
 |Indoor temperature | For Anna, Lisa or Jip this will show the temperature measured at the specific thermostat |
 |P1 Net Electricity Point | Your netto electricity at this time |
 |P1 Electricity Produced off peak cumulative | The total produced electricity during off peak |
@@ -292,15 +288,19 @@ script:
 
 Allows commanding [switches](/integrations/switch), e.g. `on`/`off` for Plugs or Aqara Smart Plugs connected to Adam, or Circles and Stealths connected to a Stretch.
 
-## Removing the integration
-
-This integration follows standard integration removal. No extra steps are required within Home Assistant or on your Plugwise devices.
-
-{% include integrations/remove_device_service.md %}
-
-This will also remove all connected Adam devices (such as Anna, Tom or Lisa) or connected Adam/Stretch plugs.
-
 ### Troubleshooting
+
+#### Accessing the local device
+accessing-the-local-device
+
+If you need to configure the Smile directly, without using the Plugwise App, you can find the link to your device by:
+
+1. Go to {% my integrations title="**Settings** > **Devices & services**" %}, and select your integration.
+2. If you have more than one Plugwise Smile, select the one to configure.
+3. Select the device with 'Smile' in it's name.
+4. On the integration entry, choose to open the configuration URL left of the {% icon "mdi:dots-vertical" %} icon.
+5. A new window/tab will open, enter `smile` (or `stretch`) as the username and your Smile ID as the password.
+6. Consult the manual or click the `search` button on the [Plugwise Support](https://plugwise.com/support/) page for interactive help.
 
 #### Modify the Smile update interval
 
@@ -308,9 +308,7 @@ This will also remove all connected Adam devices (such as Anna, Tom or Lisa) or 
 
 #### Diagnostic data
 
-If you need to create an issue to report a bug or want to inspect diagnostic data use the below method
-
-To retrieve diagnostics:
+If you need to create an issue to report a bug or want to inspect diagnostic data, use the below method to retrieve diagnostics:
 
 1. Go to {% my integrations title="**Settings** > **Devices & services**" %}, and select your integration.
 2. If you have more than one Plugwise Smile, select the gateway that is experiencing issues.
@@ -339,7 +337,7 @@ The Plugwise integration relies on the [plugwise](https://pypi.org/project/plugw
 
 ### Adam
 
-A complete zone control system) also known as Adam HA, supporting:
+A complete zone control system also known as Adam HA, supporting:
 
 - On/Off, OpenTherm or Loria/Thermastage heating and cooling support.
 - Running firmwares v3.x or v2.3
@@ -347,27 +345,15 @@ A complete zone control system) also known as Adam HA, supporting:
   - Zone thermostats such as Lisa or Anna (see warning below on Anna),
   - A temperature sensor, Jip,
   - Valve controllers called Floor or Tom,
-  - An under-floor heating controler Koen (always comes with a Plug as the active part),
+  - An under-floor heating controller Koen (always comes with a Plug as the active part),
   - Smart switches, either Plug or Aqara Smart Plug.
 
 ### Anna
 
 A smart thermostat, supporting:
 
-- OnOff, OpenTherm heating and Elga or Loria/Thermastage with heating and cooling support. (see note below on Elga).
+- OnOff, OpenTherm heating and Elga or Loria/Thermastage with heating and cooling support. (see [known limitations](#known-limitations) below for the Elga).
 - Running firmware v4.x, v3.x or v1.x.
-
-{% note %}
-For Elga devices:
-
-- The cooling mode can only be toggled via a physical switch on the device (not through the Plugwise App).
-- After changing the cooling mode switch position, you must reload the Plugwise integration for the changes to take effect.
-
-{% endnote %}
-
-{% warning %}
-Anna When Anna is used as a Zone Thermostat you should not configure it separately, as indicated in the [Configuration](#configuration)-section.
-{% endwarning %}
 
 ### P1 (DSMR)
 
@@ -375,5 +361,33 @@ A smart meter monitor for single or multi-phase P1 monitoring with the P1 runnin
 
 ### Stretch (end-of-sale)
 
-For legaacy power switches, such as the Circles or Stealths, with v3.x or v2.x Stretch firmware.
+For legacy power switches, such as the Circles or Stealths, with v3.x or v2.x Stretch firmware.
 
+## Known limitations
+
+### Schedule configuration and pre-requisites
+
+Creation, modification or deleting of climate schedules is not supported through this integration. We recommend using the Plugwise App or visit the local device to configure schedules. See [accessing the local device](#accessing-the-local-device) above on how to access the local device from Home Assistant.
+
+To display your schedule as a valid `select` option for this integration ensure that the schedule has a minimal of two schedule points.
+
+### Anna as a zone thermostat
+
+If you are using your Anna as part of your adam zone control system, it can not be configured as a smart thermostat. The integration will not discover your Anna or allow manual configuration. 
+
+### Anna with Elga
+
+The cooling mode can only be toggled via a physical switch on the device (not through the Plugwise App).
+After changing the cooling mode switch position, you must reload the Plugwise integration for the changes to take effect.
+
+### Legacy power devices
+
+Plugwise formerly sold Power based products comprised of a USB stick and smart plugs (amongst a few other items). This integration does **not** support the USB-stick. Reuse of the these products, such as Circles and Stealths using a Stretch or an Adam is supported. Work for USB support is in development by the community but not ready to become a formal Home Assistant integration just yet.
+
+## Removing the integration
+
+This integration follows standard integration removal. No extra steps are required within Home Assistant or on your Plugwise devices.
+
+{% include integrations/remove_device_service.md %}
+
+This will also remove all connected Adam devices (such as Anna, Tom or Lisa) or connected Adam/Stretch plugs.
