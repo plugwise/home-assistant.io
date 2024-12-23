@@ -1,6 +1,6 @@
 ---
 title: Plugwise
-description: Plugwise Gateway platform integration.
+description: Plugwise gateway platform integration.
 ha_category:
   - Binary sensor
   - Button
@@ -34,15 +34,12 @@ ha_integration_type: hub
 
 ## Supported devices
 
-This integration supports one or more of the Plugwise Gateways available on your network. You can connect to these gateways using your browser, the Plugwise App, or this Home Assistant integration. There are 5 types of gateways:
+This integration supports one or more of the Plugwise gateways available on your network. You can connect to these gateways using your browser, the Plugwise App, or this Home Assistant integration. There are 5 types of gateways:
 
 - Full zonecontrol using the [Adam](https://www.plugwise.com/en_US/zonecontrol) using [additional devices](#devices-overview) such as smart valves and smart-plugs.
 - A stand-alone smart thermostat called [Anna](https://www.plugwise.com/en_US/products/anna).
 - For power monitoring there is a device simply called the [P1](https://www.plugwise.com/en_US/products/smile-p1).
 - Although no longer sold, there also is support for Stretch, a gateway to create network connectivity for their older power products.
-- **Not supported yet!** The newest in the family, [Anna P1](https://www.plugwise.com/product/anna-p1/) cleverly uses energy (solar) information to transfer abundant energy in heatpump usage. [Contact us](#anna-p1) if you have one!
-
-Plugwise formerly sold power-based products using a USB stick as the controller. This integration does not support the `Stick` directly, see [legacy power devices](#legacy-power-devices) for more information.
 
 ## Platforms
 
@@ -50,7 +47,7 @@ Depending on your specific gateway and connected devices, the following platform
 
 - [Climate](#climate) for Adam and (a stand-alone) Anna.
 - [Binary Sensor](#binary-sensor) for status of your domestic hot water or secondary heater.
-- [Button](#button) to reboot your Plugwise Gateway.
+- [Button](#button) to reboot your Plugwise gateway.
 - [Number](#number) to change a boiler setpoint or temperature offset.
 - [Sensor](#sensor) a variety of sensors is available for all gateways and connected devices.
 - [Select](#select) to change your thermostat schedule or regulation mode.
@@ -64,9 +61,9 @@ Plugwise gateways on your network are automatically discovered and displayed on 
 
 {% configuration_basic %}
 Host:
-  description: "The hostname or IP address of your Gateway. For example: `192.168.1.25`. You can find it in your router or in the Plugwise app using the **Settings** icon (&#9776;) -> **System** -> **Network**. In the Plugwise App, to locate a specific device, select **Gateways** on the main screen, choose your desired gateway, and then follow the previous instructions. Normally, the Gateway(s) are automatically discovered, and you don't have to provide the hostname or IP address."
+  description: "The hostname or IP address of your gateway. For example: `192.168.1.25`. You can find it in your router or in the Plugwise app using the **Settings** icon (&#9776;) -> **System** -> **Network**. In the Plugwise App, to locate a specific device, select **Gateways** on the main screen, choose your desired gateway, and then follow the previous instructions. Normally, the gateway(s) are automatically discovered, and you don't have to provide the hostname or IP address."
 Username:
-  description: "Username to log in to the Gateway. This should be `smile` for most devices, or `stretch` for a Stretch."
+  description: "Username to log in to the gateway. This should be 'smile' for most devices, or 'stretch' for a Stretch."
 Password:
   description: "Each gateway requires its unique 8-character ID, found on a sticker at the bottom, as its password."
 {% endconfiguration_basic %}
@@ -76,8 +73,8 @@ Password:
 1. **Initial Setup**: First, activate a schedule using the Plugwise App or browser.
 2. **Control via Home Assistant**:
    - Use the [climate](#climate) card to activate/deactivate schedules.
-   - `Auto` mode indicates the schedule is active.
-   - `Heat` mode signifies the schedule is inactive.
+   - 'Auto' mode indicates the schedule is active.
+   - 'Heat' mode signifies the schedule is inactive.
 3. **Changing Schedules**: Use the thermostat [select](#select) entity.
 
 {% note %}
@@ -98,7 +95,7 @@ The interval at which the integration fetches data from the gateway depends on t
 
 This integration displays all Plugwise devices in your configuration, including hardware devices, multi-thermostat climate zones, and virtual switch groups. Additionally, a device representing your Plugwise gateway (e.g., Adam, Smile-T, or P1) will be visible.
 
-For example, if you have an Adam setup with a Lisa named `Living` and a Tom named `Bathroom`, these will show up as individual devices. The heating/cooling device connected to your gateway will be shown as `OpenTherm` or `OnOff`, depending on how the gateway communicates with the device. If you have Plugs (as in, pluggable switches connecting to an Adam) or Aqara Smart Plugs, those will be shown as devices as well.
+For example, if you have an Adam setup with a Lisa named 'Living' and a Tom named 'Bathroom', these will show up as individual devices. The heating/cooling device connected to your gateway will be shown as 'OpenTherm' or 'OnOff', depending on how the gateway communicates with the device. If you have Plugs (as in, pluggable switches connecting to an Adam) or Aqara Smart Plugs, those will be shown as devices as well.
 
 Each device will list entities such as `binary sensors`, `sensors`, etc., depending on its capabilities: for instance centralized measurements such as `power` for a P1, `outdoor_temperature` on Anna or Adam will be assigned to your gateway device. Heating/cooling device measurements such as `boiler_temperature` will be assigned to the OpenTherm/OnOff device.
 
@@ -108,20 +105,30 @@ Each device will list entities such as `binary sensors`, `sensors`, etc., depend
 
 The [climate entity](/integrations/climate) is displayed for each zone that includes a thermostat. This can be any supported single thermostat such as the Anna or another type of wired-thermostat, Jip or Lisa combined with one or more Tom/Floor devices. Or a combination of for instance a Lisa, two Jips and several Toms in one large zone.
 
+#### HVAC modes
+
+The following HVAC modes are available:
+
+- `auto`: Active schedule – The thermostat changes presets/setpoints according the schedule.
+- `cool or heat`: No active schedule – The system is manually set to cooling or heating mode, activating based on room temperature relative to the thermostat setpoint.
+
+For Adam:
+
+- `off`: Regulation is set to off – The HVAC system does not heat or cool, but the domestic hot water heating function (if available) remains active.
+
+If you have an Anna with Elga:
+
+- `heat_cool`: No active schedule – The system is in automatic cooling or heating mode, using the active preset or manually set temperature to control the HVAC system.
+
+{% note %}
+The last schedule that was active is determined the same way long-tapping the top of an Anna works.
+{% endnote %}
+
 #### Setting the HVAC mode
 
 action: `climate.set_hvac_mode`
 
 Available options include `off` (Adam only) `auto`, `cool`, `heat`, and `heat_cool` (Anna with Elga only).
-
-|HVAC mode|Indication|Description|
---- | --- | ---
-|`auto` | Active schedule | The thermostat will change presets/setpoints accordingly. |
-|`cool` or `heat`| No active schedule | If the system is **manually** set to cooling- or heating-mode, the system will be active if the room temperature is above/below the thermostat setpoint. |
-|`heat_cool`| No active schedule | If the system is in **automatic** cooling- or heating-mode, the active preset or manually set temperature is used to control the HVAC system. |
-|`off`| Adam regulation is set to off | The connected HVAC-system does not heat or cool, only the domestic hot water heating function, if available, is active. |
-
-The last schedule that was active is determined the same way long-tapping the top of Anna works.
 
 Example:
 
@@ -167,20 +174,6 @@ actions:
   - delay:
       seconds: 30
 mode: single
-```
-
-#### Update gateway data
-
-Forced update of data from your gateway can be triggered by calling the generic `homeassistant.update_entity` action.
-
-```yaml
-# Example script to retrieve the latest living room temperature measurement
-script:
-  force_adam_update:
-    sequence:
-      - action: homeassistant.update_entity
-        target:
-          entity_id: climate.living_room
 ```
 
 #### Set temperature
@@ -317,7 +310,7 @@ Allows commanding [switches](/integrations/switch), e.g. `on`/`off` for Plugs or
 If you need to configure the gateway directly, without using the Plugwise App, you can find the link to your device by:
 
 1. Go to {% my integrations title="**Settings** > **Devices & services**" %}, and select your integration.
-2. If you have more than one Plugwise Gateway, select the one to configure.
+2. If you have more than one Plugwise gateway, select the one to configure.
 3. Select the gateway device, this should be called `Adam` or contain `Smile` in its name.
 4. On the integration entry, choose to open the configuration URL left of the {% icon "mdi:dots-vertical" %} icon.
 5. A new window/tab will open, enter `smile` (or `stretch`) as the username and the ID, from the sticker on the back, as the password.
@@ -334,7 +327,7 @@ Please note that the [default intervals](#data-updates) are considered best prac
 If you need to create an issue to report a bug or want to inspect diagnostic data, use the below method to retrieve diagnostics:
 
 1. Go to {% my integrations title="**Settings** > **Devices & services**" %}, and select your integration.
-2. If you have more than one Plugwise Gateway, select the gateway that is experiencing issues.
+2. If you have more than one Plugwise gateway, select the gateway that is experiencing issues.
 3. Select the gateway device, this should be called `Adam` or contain `Smile` in its name.
 4. On the integration entry, select the {% icon "mdi:dots-vertical" %}.
    - Then, select **Download diagnostics** and a JSON file will be downloaded.
@@ -427,3 +420,8 @@ This integration adheres to the standard removal process. No extra steps are req
 
 This will also remove, from Home Assistant, any connected Adam devices (such as Anna, Tom, or Lisa) and connected Adam/Stretch plugs.
 
+## Unsupported Devices
+
+- **Not supported yet!** The newest in the family, [Anna P1](https://www.plugwise.com/product/anna-p1/) cleverly uses energy (solar) information to transfer abundant energy in heatpump usage. [Contact us](#anna-p1) if you have one!
+
+Plugwise formerly sold power-based products using a USB stick as the controller. This integration does not support the 'Stick' directly, see [legacy power devices](#legacy-power-devices) for more information.
